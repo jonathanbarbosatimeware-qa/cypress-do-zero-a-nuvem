@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Curso 'Cypress, do Zero à Nuvem' da Escola Talking About Testing.",
   "main": "src/index.html",
-"scripts": {
+  "scripts": {
     "start": "live-server src --port=3000 --no-browser",
     "cy:open": "cypress open",
     "test": "cypress run"
@@ -25,6 +25,7 @@
   "license": "MIT",
   "homepage": "https://github.com/wlsf82/cypress-do-zero-a-nuvem#readme",
   "devDependencies": {
-    "cypress": "^15.14.2"
+    "cypress": "^15.14.2",
+    "live-server": "^1.2.2"
   }
 }

@@ -2,14 +2,7 @@ name: Cypress Tests
 on: [push]
 jobs:
   cypress-run:
-    runs-on: ubuntu-latest
-    # Runs tests in parallel with matrix strategy https://on.cypress.io/parallelization
-    # https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/run-job-variations
-    # Also see warning here https://github.com/cypress-io/github-action#parallel
-    strategy:
-      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
-      matrix:
-        containers: [1, 2] # Uses 2 parallel instances
+    runs-on: ubuntu-latest,
     steps:
       - name: Checkout 📥
         uses: actions/checkout@v4 # Atualizei para v4 que é a mais estável
@@ -29,7 +22,7 @@ jobs:
           start: npm start
           wait-on: 'http://localhost:3000'
           record: true
-          parallel: true
+          
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

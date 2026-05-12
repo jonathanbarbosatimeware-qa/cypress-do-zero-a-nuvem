@@ -6,11 +6,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    // Adicione a linha abaixo para desativar o modo inseguro
-    allowCypressEnv: false,
+    baseUrl: 'http://localhost:3000',
+    supportFile: 'cypress/support/e2e.js',
   },
 });
-module.exports = {
-  projectId: "d6yi5d",
-  // ...rest of the Cypress project config
-}

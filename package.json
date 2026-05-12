@@ -6,6 +6,8 @@
   "scripts": {
     "start": "live-server src --port=3000 --no-browser",
     "cy:open": "cypress open",
+    "cy:open:mobile": "cypress open --config viewportWidth=410,viewportHeight=860",
+    "cy:run:mobile": "cypress run --config viewportWidth=410,viewportHeight=860",
     "test": "cypress run"
   },
   "repository": {

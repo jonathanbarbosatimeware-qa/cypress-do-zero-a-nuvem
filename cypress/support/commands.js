@@ -36,9 +36,9 @@ Cypress.Commands.add('fillMandatoryFieldsAndSubmit', (userCustomData = {}) => {
     ...userCustomData // 
   }
 
-  cy.get('#firstName').type(data.firstName, { force: true })
-  cy.get('#lastName').type(data.lastName, { force: true })
-  cy.get('#email').type(data.email, { force: true })
-  cy.get('#open-text-area').type(data.text, { force: true })
-  cy.contains('button','Enviar').click({ force: true })
+  cy.get('#firstName').type(data.firstName, { delay: 100})
+  cy.get('#lastName').type(data.lastName, { delay: 100})
+  cy.get('#email').type(data.email, { delay: 100 })
+  cy.get('#open-text-area').type(data.text, { delay: 50})
+  cy.contains('button','Enviar').click()
 })

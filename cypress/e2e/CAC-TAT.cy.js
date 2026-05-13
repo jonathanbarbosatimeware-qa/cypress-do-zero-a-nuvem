@@ -121,153 +121,147 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   it('seleciona um arquivo da pasta fixtures', () => {
-
     cy.get('input[type="file"]')
-      // 2. .selectFile: Comando nativo do Cypress para selecionar arquivos.
-      // Usamos o caminho relativo a partir da raiz do projeto.
+      .wait(1500)
       .selectFile('cypress/fixtures/example.json')
-      // 3. .should com função de callback: Usado para acessar propriedades internas do elemento
-      // que não estão disponíveis em asserções simples como 'have.value'.
       .should(($input) => {
-        // $input[0]: Acessa o elemento nativo do DOM (fora do jQuery)
-        // .files[0]: Acessa o primeiro arquivo da lista de arquivos do input
-        // .name: Obtém o nome do arquivo que o navegador armazenou
-
-        // expect: Asserção do Chai para verificar se o nome é o esperado
         expect($input[0].files[0].name).to.equal('example.json')
       })
+    cy.wait(3000)
   })
 
   it('seleciona um arquivo simulando um drag-and-drop', () => {
+    // aqui o robô "arrasta" o arquivo para o campo
     cy.get('input[type="file"]')
-      // Passamos o caminho do arquivo e, em seguida, o objeto de configuração
+      .wait(1500)
       .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' })
       .should(($input) => {
-        // A validação continua a mesma, pois o resultado final deve ser o arquivo selecionado
         expect($input[0].files[0].name).to.equal('example.json')
       })
+    cy.wait(3000)
   })
 
   it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
-
+    //  "Alias" é como dar um apelido ao arquivo para facilitar o reuso
     cy.fixture('example.json').as('sampleFile')
+
     cy.get('input[type="file"]')
-      .selectFile('@sampleFile')
+      .wait(1500)
+      .selectFile('@sampleFile') // Usa o "apelido" criado
       .should(($input) => {
-
         expect($input[0].files[0].name).to.equal('example.json')
-
       })
-
-
-
+    cy.wait(3000)
   })
 
-  it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
-
-    cy.get('#privacy a').should('have.attr', 'target', '_blank')
-
+ it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    // Mostra que o Cypress lê o código do link sem precisar clicar
+    cy.get('#privacy a')
+      .should('have.attr', 'target', '_blank')
+    
+    cy.wait(2000) // Pausa para você explicar que o 'target=_blank' garante a nova aba
   })
 
   it('acessa a página da política de privacidade removendo o target e então clicando no link', () => {
-
-    cy.get('#privacy a').invoke('removeAttr', 'target')
+    // Demonstra a manipulação do código da página em tempo real
+    cy.get('#privacy a')
+      .wait(1000)
+      .invoke('removeAttr', 'target') // Remove a instrução de abrir nova aba
+      .wait(1000)
       .click()
-    cy.contains('Talking About Testing')
 
-
+    // Valida que agora estamos na página de privacidade dentro da mesma janela
+    cy.contains('Talking About Testing').should('be.visible')
+    
+    cy.wait(2000) // Pausa para mostrar a página carregada
   })
 
   it('testa a página da política de privacidade de forma independente', () => {
-    // Visita a página diretamente
+    // Demonstra que o teste pode ser feito diretamente na URL da funcionalidade
     cy.visit('http://localhost:3000/privacy.html')
+    cy.wait(1000)
 
-    // Verifica se o conteúdo principal está lá
+    // Verifica se o conteúdo esperado está visível
     cy.contains('Talking About Testing').should('be.visible')
-
-  })
-
-  it('exibe e remove a mensagem de sucesso após 3 segundos usando clock e tick', () => {
-  cy.clock() // 1. Congela o relógio do navegador
-
-  // 2. Ação que dispara a mensagem (Preencher tudo e enviar)
-  cy.get('#firstName').type('Jonathan')
-  cy.get('#lastName').type('Barbosa')
-  cy.get('#email').type('jonathan@exemplo.com')
-  cy.get('#open-text-area').type('Teste de tempo')
-  cy.contains('button', 'Enviar').click()
-
-  // 3. Verifica que a mensagem APARECEU
-  cy.get('.success').should('be.visible')
-
-  // 4. A mágica: Avança o tempo em 3 segundos (3000ms) instantaneamente
-  cy.tick(3000)
-
-  // 5. Verifica que a mensagem DESAPARECEU
-  cy.get('.success').should('not.be.visible')
-})
-
-// O primeiro argumento é o número de vezes (ex: 3)
-// O segundo é a função de callback que contém o seu 'it'
-Cypress._.times(5, () => {
-  it('roda o teste de envio do formulário repetidas vezes para garantir estabilidade', () => {
-    cy.clock() // Aproveita que você já aprendeu o clock!
-
-    cy.get('#firstName').type('Jonathan')
-    cy.get('#lastName').type('Barbosa')
-    cy.get('#email').type('jonathan@exemplo.com')
-    cy.get('#open-text-area').type('Repetindo para testar estabilidade')
-    cy.contains('button', 'Enviar').click()
-
-    cy.get('.success').should('be.visible')
     
+    cy.wait(2000) // Pausa final antes de encerrar o bloco
+  })
+  it('exibe e remove a mensagem de sucesso após 3 segundos usando clock e tick', () => {
+    cy.clock() // 1. Congela o relógio do navegador
+
+    // 2. Ação que dispara a mensagem (Preencher tudo e enviar)
+    cy.fillMandatoryFieldsAndSubmit()
+
+    // 3. Verifica que a mensagem APARECEU
+    cy.get('.success').should('be.visible')
+
+    // 4. A mágica: Avança o tempo em 3 segundos (3000ms) instantaneamente
     cy.tick(3000)
+
+    // 5. Verifica que a mensagem DESAPARECEU
     cy.get('.success').should('not.be.visible')
   })
-})
 
-it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
-  // Pega a mensagem de sucesso, força a exibição, valida e esconde
-  cy.get('.success')
-    .should('not.be.visible')
-    .invoke('show') // Força o 'display: block'
-    .should('be.visible')
-    .and('contain', 'Mensagem enviada com sucesso.')
-    .invoke('hide') // Força o 'display: none'
-    .should('not.be.visible')
+  // O primeiro argumento é o número de vezes (ex: 3)
+  // O segundo é a função de callback que contém o seu 'it'
 
-  // Faz a mesma coisa com a de erro
-  cy.get('.error')
-    .should('not.be.visible')
-    .invoke('show')
-    .should('be.visible')
-    .and('contain', 'Valide os campos obrigatórios!')
-    .invoke('hide')
-    .should('not.be.visible')
-})
+  Cypress._.times(5, () => {
+    it('roda o teste de envio do formulário repetidas vezes para garantir estabilidade', () => {
+      cy.clock() // Aproveita que você já aprendeu o clock!
 
-it('faz uma requisição HTTP para a URL da aplicação', () => {
-  cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
-    .should((response) => {
-      // Aqui usamos a desestruturação do JavaScript (que você deve ter visto na trilha)
-      const { status, statusText, body } = response
-      
-      expect(status).to.equal(200) // Status de sucesso
-      expect(statusText).to.equal('OK') // Texto de sucesso
-      expect(body).to.include('CAC TAT') // Garante que o conteúdo da página está lá
+      cy.get('#firstName').type('Jonathan')
+      cy.get('#lastName').type('Barbosa')
+      cy.get('#email').type('jonathan@exemplo.com')
+      cy.get('#open-text-area').type('Repetindo para testar estabilidade')
+      cy.contains('button', 'Enviar').click()
+      cy.get('.success').should('be.visible')
+      cy.tick(3000)
+      cy.get('.success').should('not.be.visible')
     })
-})
+  })
 
-it('encontra o gato escondido e o torna visível', () => {
-  cy.get('#cat')
-    .should('not.be.visible') // Garante que ele começa escondido
-    .invoke('show')           // Força o CSS a mostrar o elemento
-    .should('be.visible')    // Agora sim, ele tem que estar visível
-    
-  // Bônus: Mudar o texto do título usando invoke também!
-  cy.get('#title')
-    .invoke('text', 'CAT TAT') 
-})
+  it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+    // Pega a mensagem de sucesso, força a exibição, valida e esconde
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show') // Força o 'display: block'
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide') // Força o 'display: none'
+      .should('not.be.visible')
+
+    // Faz a mesma coisa com a de erro
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
+
+  it('faz uma requisição HTTP para a URL da aplicação', () => {
+    cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+      .should((response) => {
+        // Aqui usamos a desestruturação do JavaScript (que você deve ter visto na trilha)
+        const { status, statusText, body } = response
+
+        expect(status).to.equal(200) // Status de sucesso
+        expect(statusText).to.equal('OK') // Texto de sucesso
+        expect(body).to.include('CAC TAT') // Garante que o conteúdo da página está lá
+      })
+  })
+
+  it('encontra o gato escondido e o torna visível', () => {
+    cy.get('#cat')
+      .should('not.be.visible') // Garante que ele começa escondido
+      .invoke('show')           // Força o CSS a mostrar o elemento
+      .should('be.visible')    // Agora sim, ele tem que estar visível
+
+    // Bônus: Mudar o texto do título usando invoke também!
+    cy.get('#title')
+      .invoke('text', 'CAT TAT')
+  })
 
 });
 

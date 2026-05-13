@@ -6,7 +6,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
 
   it('verifica o título da aplicação', () => {
-    cy.title().should('be.equal', 'Central de Ante TATtendimento ao Clie')
+    cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
   })
 
   it('preenche os campos obrigatórios e envia o formulário', () => {
@@ -184,10 +184,90 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
     // Verifica se o conteúdo principal está lá
     cy.contains('Talking About Testing').should('be.visible')
+
   })
 
+  it('exibe e remove a mensagem de sucesso após 3 segundos usando clock e tick', () => {
+  cy.clock() // 1. Congela o relógio do navegador
 
+  // 2. Ação que dispara a mensagem (Preencher tudo e enviar)
+  cy.get('#firstName').type('Jonathan')
+  cy.get('#lastName').type('Barbosa')
+  cy.get('#email').type('jonathan@exemplo.com')
+  cy.get('#open-text-area').type('Teste de tempo')
+  cy.contains('button', 'Enviar').click()
 
+  // 3. Verifica que a mensagem APARECEU
+  cy.get('.success').should('be.visible')
+
+  // 4. A mágica: Avança o tempo em 3 segundos (3000ms) instantaneamente
+  cy.tick(3000)
+
+  // 5. Verifica que a mensagem DESAPARECEU
+  cy.get('.success').should('not.be.visible')
+})
+
+// O primeiro argumento é o número de vezes (ex: 3)
+// O segundo é a função de callback que contém o seu 'it'
+Cypress._.times(5, () => {
+  it('roda o teste de envio do formulário repetidas vezes para garantir estabilidade', () => {
+    cy.clock() // Aproveita que você já aprendeu o clock!
+
+    cy.get('#firstName').type('Jonathan')
+    cy.get('#lastName').type('Barbosa')
+    cy.get('#email').type('jonathan@exemplo.com')
+    cy.get('#open-text-area').type('Repetindo para testar estabilidade')
+    cy.contains('button', 'Enviar').click()
+
+    cy.get('.success').should('be.visible')
+    
+    cy.tick(3000)
+    cy.get('.success').should('not.be.visible')
+  })
+})
+
+it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+  // Pega a mensagem de sucesso, força a exibição, valida e esconde
+  cy.get('.success')
+    .should('not.be.visible')
+    .invoke('show') // Força o 'display: block'
+    .should('be.visible')
+    .and('contain', 'Mensagem enviada com sucesso.')
+    .invoke('hide') // Força o 'display: none'
+    .should('not.be.visible')
+
+  // Faz a mesma coisa com a de erro
+  cy.get('.error')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Valide os campos obrigatórios!')
+    .invoke('hide')
+    .should('not.be.visible')
+})
+
+it('faz uma requisição HTTP para a URL da aplicação', () => {
+  cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+    .should((response) => {
+      // Aqui usamos a desestruturação do JavaScript (que você deve ter visto na trilha)
+      const { status, statusText, body } = response
+      
+      expect(status).to.equal(200) // Status de sucesso
+      expect(statusText).to.equal('OK') // Texto de sucesso
+      expect(body).to.include('CAC TAT') // Garante que o conteúdo da página está lá
+    })
+})
+
+it('encontra o gato escondido e o torna visível', () => {
+  cy.get('#cat')
+    .should('not.be.visible') // Garante que ele começa escondido
+    .invoke('show')           // Força o CSS a mostrar o elemento
+    .should('be.visible')    // Agora sim, ele tem que estar visível
+    
+  // Bônus: Mudar o texto do título usando invoke também!
+  cy.get('#title')
+    .invoke('text', 'CAT TAT') 
+})
 
 });
 

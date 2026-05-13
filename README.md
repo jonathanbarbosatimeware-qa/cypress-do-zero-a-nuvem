@@ -11,7 +11,6 @@ O projeto foca na automação de testes de ponta a ponta (E2E) e testes de integ
 
 ⚙️ Pré-requisitos
 
----
 
 ### ⚙️ Sistemas e Versões
 
@@ -35,7 +34,6 @@ Para contribuir ou entender a lógica deste projeto, é fundamental ter familiar
 
 ---
 
----
 
 🛠️ GUIA DE INSTALAÇÃO E EXECUÇÃO
 
@@ -68,7 +66,9 @@ Para contribuir ou entender a lógica deste projeto, é fundamental ter familiar
 
 DICA: Mantenha o servidor (npm start) ativo durante toda a execução.
 
-🔍 O que está sendo testado? <details><summary><b>👉 Clique aqui para ver oque esta sendo testado</b></summary>
+🔍 O que está sendo testado?
+
+ <details><summary><b>👉 Clique aqui para ver oque esta sendo testado</b></summary>
 
 A suíte de testes abrange os seguintes cenários críticos:
 
@@ -93,15 +93,17 @@ A suíte de testes abrange os seguintes cenários críticos:
 * Para garantir a **reutilização** e a **manutenibilidade**, criamos comandos personalizados no arquivo `support/commands.js`.
 
 * `cy.fillMandatoryFieldsAndSubmit()`: Realiza o preenchimento completo do formulário principal de forma inteligente, permitindo a sobrescrita de dados através de objetos JavaScript.
+
 </details>
 
 ---
 
 # 🛠️ Documentação Técnica do Projeto de Automação (Cypress)
 
-Este documento detalha a estrutura e a interconexão das ferramentas utilizadas neste projeto de automação de testes para a Timeware.
+<details><summary><b>👉 Clique aqui para ver a Documentação Técnica</b></summary>
 
----
+
+Este documento detalha a estrutura e a interconexão das ferramentas utilizadas neste projeto de automação de testes para a Timeware.
 
 ## 🏗️ O Ecossistema: Como tudo se conecta
 
@@ -116,6 +118,8 @@ A automação não é apenas um código isolado, mas uma engrenagem de ferrament
 ---
 
 ## 📂 Detalhamento dos Arquivos
+
+<details><summary><b>👉 Clique aqui para ver o Detalhamento dos Arquivos</b></summary>
 
 ### 📄 package.json
 
@@ -257,7 +261,9 @@ O **Inspetor Automático**. Este arquivo configura a Integração Contínua (CI)
     2. **Setup Node.js**: Instala o motor JavaScript (v20).
     3. **Install dependencies**: Instala as ferramentas exatas listadas no `package-lock`.
     4. **Cypress run**: Inicia o servidor, espera ele ficar pronto e roda todos os testes, gravando os resultados.
+    </details>
 
+    ---
 
 👨‍💻 Autor
 

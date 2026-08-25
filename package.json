@@ -4,7 +4,7 @@
   "description": "Curso 'Cypress, do Zero à Nuvem' da Escola Talking About Testing.",
   "main": "src/index.html",
   "scripts": {
-    "start": "live-server src --port=3000 --no-browser",
+    "start": "serve src --listen 3000 --no-clipboard",
     "cy:open": "cypress open",
     "cy:open:mobile": "cypress open --config viewportWidth=410,viewportHeight=860",
     "cy:run:mobile": "cypress run --config viewportWidth=410,viewportHeight=860",
@@ -27,10 +27,10 @@
   "license": "MIT",
   "homepage": "https://github.com/jonathanalves-timeware/cypress-do-zero-a-nuvem#readme",
   "devDependencies": {
-    "cypress": "^15.14.2",
-    "live-server": "^1.2.2"
+    "cypress": "^15.21.1",
+    "serve": "^14.2.6"
   },
   "allowScripts": {
-    "cypress@15.14.2": true
+    "cypress@15.21.1": true
   }
 }

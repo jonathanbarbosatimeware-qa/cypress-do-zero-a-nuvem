@@ -29,5 +29,8 @@
   "devDependencies": {
     "cypress": "^15.14.2",
     "live-server": "^1.2.2"
+  },
+  "allowScripts": {
+    "cypress@15.14.2": true
   }
 }
